@@ -1,6 +1,9 @@
 package com.genug.programmers.heap.lv1;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 // 더 맵게
@@ -11,29 +14,66 @@ public class MoreSpicy {
     public void main () {
         // 섞은 음식의 스코빌 지수 = 가장 맵지 않은 음식의 스코빌 지수 + (두 번째로 맵지 않은 음식의 스코빌 지수 * 2)
         // [1, 2, 3, 9, 10, 12]	7	2
-        // solution(new int[] {1, 2, 3, 9, 10, 12}, 7);
+        assertEquals(2, solution(new int[] {1, 2, 3, 9, 10, 12}, 7));
+        System.out.println();
+        assertEquals(5, solution(new int[] {1, 0, 1, 1, 0, 0}, 7));
+        assertEquals(-1, solution(new int[] {1, 0, 1, 0, 0, 0}, 7));
 
+        /*
         assertArrayEquals(new int[]{0, 1, 2, 3, 4}, sort(new int[]{4, 2, 3, 1, 0}));
-//        assertArrayEquals(new int[]{0, 1, 2, 3, 4}, sort(new int[]{4, 3, 2, 1, 0}));
-//        assertArrayEquals(new int[]{0, 1, 2, 3, 4}, sort(new int[]{3, 4, 1, 2, 0}));
+        assertArrayEquals(new int[]{0, 1, 2, 3, 4}, sort(new int[]{4, 3, 2, 1, 0}));
+        assertArrayEquals(new int[]{0, 1, 2, 3, 4}, sort(new int[]{3, 4, 1, 2, 0}));
+         */
     }
 
     public int solution(int[] scoville, int K) {
         int answer = 0;
-        mix(scoville, K, 0);
-        return answer;
+        while (check(scoville, K)) {
+            mix(scoville);
+        }
+        for (int i : scoville) {
+            if ( i == -1) answer++;
+        }
+        return answer == scoville.length ? -1 : answer;
     }
 
-    public int mix(int[] scovile, int k, int count) {
-        scovile = sort(scovile);
-        for (int i = 0; i < scovile.length; i++) {
-            System.out.println(i);
+    boolean check(int[] scoville, int K) {
+        for (int i = 0; i < scoville.length; i++) {
+            if (scoville[i] > -1) {
+                if (scoville[i] < K)
+                    return true;
+            }
         }
-        return count;
+        return false;
+    }
+    // -1 -1 -1 -1 -1 -1 == -1
+    // -1 -1 -1 -1 -1 8 == 5
+    void mix(int[] scoville) {
+        boolean flag = false;
+        for (int i = 0; i < scoville.length-1; i++) {
+            if (scoville[i] > -1) {
+                scoville[i+1] = scoville[i] + (scoville[i+1] * 2);
+                scoville[i] = -1;
+                if (i+1 < scoville.length-1) {
+                    for (int j = i+1; j < scoville.length-1; j++) {
+                        if (scoville[j] > scoville[j+1]) {
+                            int temp = scoville[j];
+                            scoville[j] = scoville[j+1];
+                            scoville[j+1] = temp;
+                        }
+                    }
+                }
+                flag = true;
+                break;
+            }
+        }
+        if (!flag) {
+            scoville[scoville.length-1] = -1;
+        }
     }
 
     // 버블정렬
-    public int[] sort(int[] array) {
+    public void sort(int[] array) {
         int temp = 0;
         int count = 1;
         while(count < array.length) {
@@ -53,11 +93,13 @@ public class MoreSpicy {
                 // 2, 1, 0, 3, 4 -> 1, 2, 0, 3, 4 -> 1, 0, 2, 3, 4
                 // 1, 0, 2, 3, 4 -> 0, 1, 2, 3, 4
             }
+            /*
             System.out.print(count-1 + ": ");
             for (int i : array) {
                 System.out.print(i + " ");
             }
             System.out.println();
+             */
         }
         /*
         for (int i = 1; i < array.length-1; i++) {
@@ -77,7 +119,6 @@ public class MoreSpicy {
             if (flag) i--;
         }
         */
-        return array;
     }
 
 }
