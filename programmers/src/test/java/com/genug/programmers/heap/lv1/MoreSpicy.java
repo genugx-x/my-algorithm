@@ -18,7 +18,6 @@ public class MoreSpicy {
         System.out.println();
         assertEquals(5, solution(new int[] {1, 0, 1, 1, 0, 0}, 7));
         assertEquals(-1, solution(new int[] {1, 0, 1, 0, 0, 0}, 7));
-
         /*
         assertArrayEquals(new int[]{0, 1, 2, 3, 4}, sort(new int[]{4, 2, 3, 1, 0}));
         assertArrayEquals(new int[]{0, 1, 2, 3, 4}, sort(new int[]{4, 3, 2, 1, 0}));
@@ -72,10 +71,33 @@ public class MoreSpicy {
         }
     }
 
-    // 버블정렬
+    void mix2(int[] scoville) {
+        boolean flag = false;
+
+        for (int i = 1; i < scoville.length-1; i++) {
+//            int left = scoville[(i+1)*2-(i+1)];
+//            int right = scoville[(i+1)*2+1-1];
+            int left = scoville[i*2];
+            int right = scoville[i*2+1];
+            if (left <= right) {
+                int v = scoville[i] + (scoville[left] * 2);
+            }
+        }
+    }
+    int[] getHeap(int[] array) {
+        int[] heap = new int[array.length+1];
+        Arrays.sort(array);
+        for (int i = 0; i < array.length; i++) {
+            heap[i+1] = array[i];
+        }
+        return heap;
+    }
+
+    // 3, 2, 1, 6, 4, 5
     public void sort(int[] array) {
         int temp = 0;
         int count = 1;
+        int[] heap = new int[array.length+1];
         while(count < array.length) {
             count++;
             for (int i = 0; i < array.length - 1; i++) {
