@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.*;
 // 더 맵게
 public class MoreSpicy {
 
-
     @Test
     public void main () {
         // 섞은 음식의 스코빌 지수 = 가장 맵지 않은 음식의 스코빌 지수 + (두 번째로 맵지 않은 음식의 스코빌 지수 * 2)
