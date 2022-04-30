@@ -36,4 +36,17 @@ public class Sort {
         }
         return array;
     }
+
+    public void insertSort(int[] array) {
+        for (int i = 1; i < array.length; i++) {
+            int tempValue = array[i];
+            int position = i;
+            while (position > 0 &&
+                    array[position - 1] > tempValue) {
+                array[position] = array[position - 1];
+                position = position - 1;
+            }
+            array[position] = tempValue;
+        }
+    }
 }
