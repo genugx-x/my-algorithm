@@ -1,8 +1,9 @@
-package org.genug.algorithm;
-import java.util.*;
+package org.genug.algorithm.cls;
 
-public class Main {
-    public static void main(String[] args) {
+import java.util.Scanner;
+
+public class Class2 {
+    public void palindromeNumber() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             String input = scanner.nextLine();
