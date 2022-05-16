@@ -1,8 +1,6 @@
-package org.genug.algorithm.class1;
+package org.genug.algorithm.cls;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Class1 {
 
@@ -61,6 +59,44 @@ public class Class1 {
         if (flag)
             result = '?';
         System.out.println(result);
+    }
+
+    public void compareTwoNumbers() {
+        Scanner scanner = new Scanner(System.in);
+        String line = scanner.nextLine();
+        scanner.close();
+        String[] split = line.split("\\s+");
+        int a = Integer.parseInt(split[0]);
+        int b = Integer.parseInt(split[1]);
+
+        if (a < b)
+            System.out.println('<');
+        else if (a > b)
+            System.out.println('>');
+        else
+            System.out.println("==");
+    }
+
+    public void average() {
+        Scanner scanner = new Scanner(System.in);
+        String line = scanner.nextLine();
+        int count = Integer.valueOf(line);
+        line = scanner.nextLine();
+        scanner.close();
+
+        String[] words = line.split("\\s+");
+        Integer[] points = new Integer[count];
+        for (int i = 0; i < points.length; i++) {
+            points[i] = Integer.parseInt(words[i]);
+        }
+        Arrays.sort(points, Collections.reverseOrder());
+
+        double max = points[0] * 1.0;
+        double total = 0;
+        for (int point : points) {
+            total += point / max * 100;
+        }
+        System.out.println(total / count);
     }
 
 }
