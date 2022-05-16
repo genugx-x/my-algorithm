@@ -14,8 +14,8 @@ public class TestMain {
     @DisplayName("1008 - A/B")
     public void test_1008() {
         Class1 class1 = new Class1();
-        assertEquals(0.33333333333333333333333333333333, class1.devide(1, 3));
-        assertEquals(0.8, class1.devide(4, 5));
+        // assertEquals(0.33333333333333333333333333333333, class1.devide(1, 3));
+        // assertEquals(0.8, class1.devide(4, 5));
     }
 
     @Test
@@ -66,6 +66,17 @@ public class TestMain {
         assertEquals("yes", class2.palindromeNumber("121"));
         assertEquals("no", class2.palindromeNumber("1231"));
         assertEquals("yes", class2.palindromeNumber("12421"));
+    }
+
+    @Test
+    @DisplayName("2775 - 부녀회장이 될테야")
+    public void test_2775() {
+        Class2 class2 = new Class2();
+        assertEquals(6, class2.willBeWomenPresident(1, 3));
+        System.out.println();
+        assertEquals(10, class2.willBeWomenPresident(2, 3));
+        System.out.println();
+        assertEquals(1, class2.willBeWomenPresident(14, 1));
     }
 
 }

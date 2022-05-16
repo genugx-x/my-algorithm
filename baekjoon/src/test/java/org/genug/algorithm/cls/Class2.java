@@ -13,4 +13,27 @@ public class Class2 {
         }
         return "yes";
     }
+
+    public int willBeWomenPresident(int k, int n) {
+        int[] currentFloor = new int[n];
+        int[] downStairs = null;
+        for (int i = 0; i <= k; i++) {
+            if (i == 0) {
+                for (int j = 0; j < currentFloor.length; j++) {
+                    currentFloor[j] = j+1;
+                }
+            } else {
+                downStairs = currentFloor;
+                currentFloor = new int[n];
+                for (int t = 0; t < currentFloor.length; t++) {
+                    for (int l = 0; l <= t; l++) {
+                        currentFloor[t] += downStairs[l];
+                    }
+                }
+            }
+        }
+        System.out.println("currentFloor : " + Arrays.toString(currentFloor));
+        System.out.println("downStairs : " + Arrays.toString(downStairs));
+        return currentFloor[currentFloor.length-1];
+    }
 }
