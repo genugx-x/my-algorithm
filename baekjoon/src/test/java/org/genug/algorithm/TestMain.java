@@ -2,6 +2,7 @@ package org.genug.algorithm;
 
 import org.genug.algorithm.cls.Class1;
 import org.genug.algorithm.cls.Class2;
+import org.genug.algorithm.cls.Class3;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -79,4 +80,11 @@ public class TestMain {
         assertEquals(1, class2.willBeWomenPresident(14, 1));
     }
 
+    @Test
+    @DisplayName("1012 - 유기농 배추")
+    public void test_1012() {
+        Class3 class3 = new Class3();
+        class3.organicCabbage(10, 8);
+
+    }
 }
