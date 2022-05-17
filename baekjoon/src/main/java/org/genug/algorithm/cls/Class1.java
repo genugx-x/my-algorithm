@@ -99,4 +99,103 @@ public class Class1 {
         System.out.println(total / count);
     }
 
+    public void constant() {
+        StringBuilder sb = new StringBuilder();
+        Scanner scanner = new Scanner(System.in);
+        int a = 0;
+        int b = 0;
+        sb.append(scanner.next()).reverse();
+        a = Integer.parseInt(sb.toString());
+        sb.setLength(0);
+        sb.append(scanner.nextInt()).reverse();
+        b = Integer.parseInt(sb.toString());
+        System.out.println(Math.max(a, b));
+    }
+
+    public void scale() {
+        String message = null;
+        Scanner scanner = new Scanner(System.in);
+        String[] line = scanner.nextLine().split("\\s+");
+        int[] scales = new int[8];
+        for (int i = 0; i < line.length; i++) {
+            scales[i] = Integer.parseInt(line[i]);
+        }
+        for (int i = 0; i < scales.length; i++) {
+            if (scales[0] == 1) {
+                message = "ascending";
+                if (scales[i] != i+1) {
+                    message = null;
+                    break;
+                }
+            } else if (scales[0] == 8) {
+                message = "descending";
+                if (scales[i] != scales.length-i) {
+                    message = null;
+                    break;
+                }
+            }
+        }
+        if (message == null)
+            message = "mixed";
+        System.out.println(message);
+    }
+
+    public void remain() {
+        int[] remains = new int[10];
+        int count = 0;
+        Scanner scanner = new Scanner(System.in);
+        while (count < 10) {
+            remains[count] = Integer.parseInt(scanner.nextLine()) % 42;
+            count++;
+        }
+        for (int i = 0; i < remains.length; i++) {
+            for (int j = 0; j < remains.length; j++) {
+                if (i == j)
+                    continue;
+                if (remains[i] == remains[j]) {
+                    remains[i] = -1;
+                    break;
+                }
+            }
+        }
+        int result = 0;
+        for (int remain : remains) {
+            if (remain > -1)
+                result++;
+        }
+        System.out.println(result);
+    }
+
+    // 괄호 문자열(Parenthesis String, PS)
+    // 올바른 괄호 문자열 (Valid PS, VPS)
+    public void vps() {
+        Scanner scanner = new Scanner(System.in);
+        int count = Integer.parseInt(scanner.nextLine());
+        while (count > 0) {
+            String message = "NO";
+            char[] ps = scanner.nextLine().toCharArray();
+            try {
+                Stack<Boolean> stack = new Stack<>();
+                for (char p : ps) {
+                    if (p == '(')
+                        stack.push(true);
+                    else
+                    if (stack.peek()) stack.pop();
+                }
+                // System.out.println(stack.toString());
+                if (stack.isEmpty())
+                    message = "YES";
+            } catch (EmptyStackException e) {
+                // e.printStackTrace();
+                message = "NO";
+            }
+            System.out.println(message);
+            count--;
+        }
+    }
+
+    public void organicCabbage() {
+
+    }
+
 }
