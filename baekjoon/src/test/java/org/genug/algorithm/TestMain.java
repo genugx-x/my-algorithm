@@ -87,4 +87,27 @@ public class TestMain {
         class3.organicCabbage(10, 8);
 
     }
+
+    @Test
+    @DisplayName("2839 - 설탕배달")
+    public void test_2839() {
+        Class2 class2 = new Class2();
+        assertEquals(0, class2.deliverySugar(0));
+        assertEquals(1, class2.deliverySugar(5));
+        assertEquals(1, class2.deliverySugar(3));
+        assertEquals(4, class2.deliverySugar(18));
+        assertEquals(-1, class2.deliverySugar(4));
+        assertEquals(2, class2.deliverySugar(6));
+        assertEquals(3, class2.deliverySugar(9));
+        assertEquals(3, class2.deliverySugar(11));
+        /*
+         */
+    }
+
+    @Test
+    @DisplayName("10845 - 큐")
+    public void test_10845() {
+        Class2 class2 = new Class2();
+
+    }
 }
