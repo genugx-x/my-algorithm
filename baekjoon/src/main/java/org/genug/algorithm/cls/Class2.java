@@ -1,5 +1,9 @@
 package org.genug.algorithm.cls;
 
+import java.io.*;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class Class2 {
@@ -48,10 +52,160 @@ public class Class2 {
                     }
                 }
             }
-//            System.out.println("currentFloor : " + Arrays.toString(currentFloor));
-//            System.out.println("downStairs : " + Arrays.toString(downStairs));
             System.out.println(currentFloor[currentFloor.length - 1]);
             testCaseCount--;
+        }
+    }
+
+    public void deliverySugar() {
+        Scanner scanner = new Scanner(System.in);
+        int sugar = scanner.nextInt();
+        int count = 0;
+        boolean flag = false;
+        while (true) {
+            if (sugar == 0) {
+                break;
+            } else if (sugar >= 5 && !flag) {
+                count = sugar/5;
+                if ((sugar % 5) == 0) {
+                    break;
+                } else {
+                    while (count > 0) {
+                        int temp = sugar;
+                        temp -= (count * 5);
+                        temp %= 3;
+                        if (temp == 0) {
+                            count += (sugar - count*5) / 3;
+                            sugar = 0;
+                            break;
+                        }
+                        count--;
+                    }
+                }
+                flag = true;
+            } else {
+                count = sugar/3;
+                if ((sugar % 3) > 0) {
+                    count = -1;
+                }
+                break;
+            }
+        }
+        System.out.println(count);
+    }
+
+    public void queue() {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        try {
+            int count = Integer.parseInt(br.readLine());
+            Queue<Integer> queue = new LinkedList<>();
+            int back = 0;
+            while(count > 0) {
+                String[] commands = br.readLine().split("\\s+");
+                switch (commands[0]) {
+                    case "push":
+                        back = Integer.parseInt(commands[1]);
+                        queue.add(back);
+                        break;
+                    case "pop":
+                        if (queue.isEmpty())
+                            bw.write(-1 + "\n");
+                        else
+                            bw.write(queue.poll() + "\n");
+                        break;
+                    case "size":
+                        bw.write(queue.size() + "\n");
+                        break;
+                    case "empty":
+                        if (queue.isEmpty())
+                            bw.write(1 + "\n");
+                        else
+                            bw.write(0 + "\n");
+                        break;
+                    case "front":
+                        if (queue.isEmpty())
+                            bw.write(-1 + "\n");
+                        else
+                            bw.write(queue.peek() + "\n");
+                        break;
+                    case "back":
+                        if (queue.isEmpty())
+                            bw.write(-1 + "\n");
+                        else
+                            bw.write(back + "\n");
+                        break;
+                }
+                count--;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { br.close(); } catch (IOException ioe) {};
+            try { bw.close(); } catch (IOException ioe) {};
+        }
+    }
+
+    public void deque() {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        try {
+            int count = Integer.parseInt(br.readLine());
+            Deque<Integer> deque = new LinkedList<>();
+            int back = 0;
+            while(count > 0) {
+                String[] commands = br.readLine().split("\\s+");
+                switch (commands[0]) {
+                    case "push_front":
+                        deque.addFirst(Integer.parseInt(commands[1]));
+                        break;
+                    case "push_back":
+                        deque.addLast(Integer.parseInt(commands[1]));
+                        break;
+                    case "pop_front":
+                        if (deque.isEmpty())
+                            bw.write(-1 + "\n");
+                        else
+                            bw.write(deque.removeFirst() + "\n");
+                        break;
+                    case "pop_back":
+                        if (deque.isEmpty())
+                            bw.write(-1 + "\n");
+                        else
+                            bw.write(deque.removeLast() + "\n");
+                        break;
+                    case "size":
+                        bw.write(deque.size() + "\n");
+                        break;
+                    case "empty":
+                        if (deque.isEmpty())
+                            bw.write(1 + "\n");
+                        else
+                            bw.write(0 + "\n");
+                        break;
+                    case "front":
+                        if (deque.isEmpty())
+                            bw.write(-1 + "\n");
+                        else
+                            bw.write(deque.peekFirst() + "\n");
+                        break;
+                    case "back":
+                        if (deque.isEmpty())
+                            bw.write(-1 + "\n");
+                        else
+                            bw.write(deque.peekLast() + "\n");
+                        break;
+                    case "list":
+                        bw.write(deque.toString());
+                        break;
+                }
+                count--;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { br.close(); } catch (IOException ioe) {};
+            try { bw.close(); } catch (IOException ioe) {};
         }
     }
 }
