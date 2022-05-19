@@ -1,6 +1,11 @@
 package org.genug.algorithm.cls;
 
-import java.util.Scanner;
+import org.genug.algorithm.Main;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
 
 public class Class3 {
     public void organicCabbage() {
@@ -90,6 +95,93 @@ public class Class3 {
 
                 }
             }
+        }
+    }
+
+    public void dfsBfs() {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            String[] line = br.readLine().split("\\s+");
+            int count = Integer.parseInt(line[0]);
+            int inputCount = Integer.parseInt(line[1]);
+            int startPoint = Integer.parseInt(line[2]);
+            Map<Integer, SearchInfo> dfsMap = new HashMap<>();
+            Map<Integer, SearchInfo> bfsMap = new HashMap<>();
+            List<int[]> list = new ArrayList<>();
+            while (inputCount > 0) {
+                line = br.readLine().split("\\s+");
+                int[] numbers = {Integer.parseInt(line[0]), Integer.parseInt(line[1])};
+
+                int f = numbers[0];
+                int b = numbers[1];
+
+                dfsMap.putIfAbsent(f, new SearchInfo());
+                dfsMap.putIfAbsent(b, new SearchInfo());
+                dfsMap.get(f).queue.add(b);
+                dfsMap.get(b).queue.add(f);
+
+                bfsMap.putIfAbsent(f, new SearchInfo());
+                bfsMap.putIfAbsent(b, new SearchInfo());
+                bfsMap.get(f).queue.add(b);
+                bfsMap.get(b).queue.add(f);
+
+                list.add(numbers);
+                inputCount--;
+
+            }
+            List<Integer> result = new ArrayList<>();
+            dfs(startPoint, dfsMap, result);
+            for (int i : result) {
+                System.out.print(i + " ");
+            }
+            System.out.println();
+            result = new ArrayList<>();
+            result.add(startPoint);
+            bfsMap.get(startPoint).flag = true;
+            bfs(startPoint, bfsMap, result);
+            for (int i : result) {
+                System.out.print(i + " ");
+            }
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { br.close(); } catch(IOException ioe) {}
+        }
+    }
+    void dfs(int searchPoint, Map<Integer, SearchInfo> map, List<Integer> result) {
+        SearchInfo info = map.get(searchPoint);
+        info.flag = true;
+        result.add(searchPoint);
+        while(!info.queue.isEmpty()) {
+            int next = info.queue.poll();
+            if (!map.get(next).flag) {
+                dfs(next, map, result);
+            }
+        }
+    }
+
+    void bfs(int searchPoint, Map<Integer, SearchInfo> map, List<Integer> result) {
+        SearchInfo info = map.get(searchPoint);
+        info.queue.forEach( next -> {
+            if (!map.get(next).flag) {
+                map.get(next).flag = true;
+                result.add(next);
+            }
+        });
+        while(!info.queue.isEmpty()) {
+            int next = info.queue.poll();
+            bfs(next, map, result);
+        }
+    }
+
+    class SearchInfo {
+        PriorityQueue<Integer> queue;
+        Boolean flag;
+
+        public SearchInfo() {
+            this.queue = new PriorityQueue<>();
+            this.flag = false;
         }
     }
 }
