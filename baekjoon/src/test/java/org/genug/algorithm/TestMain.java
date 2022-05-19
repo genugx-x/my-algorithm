@@ -23,7 +23,8 @@ public class TestMain {
     @DisplayName("1152 - 단어의개수")
     public void test_1152() {
         Class1 class1 = new Class1();
-        assertEquals(0, class1.countWords(" "));
+        assertEquals(0, class1
+                  .countWords(" "));
         assertEquals(1, class1.countWords(" A"));
     }
 
@@ -109,5 +110,14 @@ public class TestMain {
     public void test_10845() {
         Class2 class2 = new Class2();
 
+    }
+
+    @Test
+    @DisplayName("1260 - DFS 와 BFS")
+    public void test_1260() {
+        Class3 class3 = new Class3();
+//        class3.dfsTest();
+//        class3.bfsTest();
+        class3.main();
     }
 }
