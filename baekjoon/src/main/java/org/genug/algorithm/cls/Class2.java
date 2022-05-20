@@ -208,4 +208,41 @@ public class Class2 {
             try { bw.close(); } catch (IOException ioe) {};
         }
     }
+
+    public void ex_2869() {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            String[] line = br.readLine().split("\\s+");
+            int a = Integer.parseInt(line[0]);
+            int b = Integer.parseInt(line[1]);
+            int v = Integer.parseInt(line[2]);
+            int days = v / (a-b);
+            int remain = v % (a-b);
+//            if ((a-b) > v)
+//                remain *= -1;
+            int x = 0;
+            if(a >= v) {
+                x = 1;
+            } else {
+                System.out.println(days + " " + remain);
+                int temp;
+                x = v + remain + b;
+                System.out.println(x + " = " + v + " + " + remain + " + " + b);
+                temp = x;
+                x = x - v;
+                System.out.println(x + " = " + temp + " - " + v);
+                temp = x;
+                x = v - x;
+                System.out.println(x + " = " + v + " - " + temp);
+                System.out.println((x < a) + " = x < a");
+                if (x < a)
+                    x--;
+            }
+            System.out.println(x);
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { br.close(); } catch(IOException ioe) {}
+        }
+    }
 }

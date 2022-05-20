@@ -48,7 +48,7 @@ public class Class3 {
         }
     }
 
-    static void search(int[][] visitCounts, boolean[][] checkedField, int[][] field, int d, int w) {
+    void search(int[][] visitCounts, boolean[][] checkedField, int[][] field, int d, int w) {
         if (d < checkedField.length) {
             for (; w < checkedField[d].length; w++) {
                 visitCounts[d][w]++;
@@ -62,7 +62,7 @@ public class Class3 {
         }
     }
 
-    static void search(boolean[][] checkedField, int[][] field, int d, int w) {
+    void search(boolean[][] checkedField, int[][] field, int d, int w) {
         if (w > 0) {
             if (!checkedField[d][w-1]) {
                 checkedField[d][w-1] = true;
@@ -117,13 +117,13 @@ public class Class3 {
 
                 dfsMap.putIfAbsent(f, new SearchInfo());
                 dfsMap.putIfAbsent(b, new SearchInfo());
-                dfsMap.get(f).queue.add(b);
-                dfsMap.get(b).queue.add(f);
+                dfsMap.get(f).list.add(b);
+                dfsMap.get(b).list.add(f);
 
                 bfsMap.putIfAbsent(f, new SearchInfo());
                 bfsMap.putIfAbsent(b, new SearchInfo());
-                bfsMap.get(f).queue.add(b);
-                bfsMap.get(b).queue.add(f);
+                bfsMap.get(f).list.add(b);
+                bfsMap.get(b).list.add(f);
 
                 list.add(numbers);
                 inputCount--;
@@ -131,16 +131,22 @@ public class Class3 {
             }
             List<Integer> result = new ArrayList<>();
             dfs(startPoint, dfsMap, result);
-            for (int i : result) {
-                System.out.print(i + " ");
+            for (int i = 0; i < result.size(); i++) {
+                System.out.print(result.get(i));
+                if (i < result.size()-1) {
+                    System.out.print(" ");
+                }
             }
             System.out.println();
             result = new ArrayList<>();
             result.add(startPoint);
             bfsMap.get(startPoint).flag = true;
-            bfs(startPoint, bfsMap, result);
-            for (int i : result) {
-                System.out.print(i + " ");
+            bfs(startPoint, bfsMap, result, count);
+            for (int i = 0; i < result.size(); i++) {
+                System.out.print(result.get(i));
+                if (i < result.size()-1) {
+                    System.out.print(" ");
+                }
             }
 
         } catch(Exception e) {
@@ -153,34 +159,37 @@ public class Class3 {
         SearchInfo info = map.get(searchPoint);
         info.flag = true;
         result.add(searchPoint);
-        while(!info.queue.isEmpty()) {
-            int next = info.queue.poll();
+        while(!info.list.isEmpty()) {
+            int next = info.list.get(0);
+            info.list.remove(0);
             if (!map.get(next).flag) {
                 dfs(next, map, result);
             }
         }
     }
 
-    void bfs(int searchPoint, Map<Integer, SearchInfo> map, List<Integer> result) {
+    void bfs(int searchPoint, Map<Integer, SearchInfo> map, List<Integer> result, int count) {
         SearchInfo info = map.get(searchPoint);
-        info.queue.forEach( next -> {
+        Collections.sort(info.list);
+        info.list.forEach(next -> {
             if (!map.get(next).flag) {
                 map.get(next).flag = true;
                 result.add(next);
             }
         });
-        while(!info.queue.isEmpty()) {
-            int next = info.queue.poll();
-            bfs(next, map, result);
+        while(result.size() < count && !info.list.isEmpty()) {
+            int next = info.list.get(0);
+            info.list.remove(0);
+            bfs(next, map, result, count);
         }
     }
 
     class SearchInfo {
-        PriorityQueue<Integer> queue;
+        List<Integer> list;
         Boolean flag;
 
         public SearchInfo() {
-            this.queue = new PriorityQueue<>();
+            this.list = new ArrayList<>();
             this.flag = false;
         }
     }
