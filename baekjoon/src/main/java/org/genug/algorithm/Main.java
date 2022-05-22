@@ -1,37 +1,51 @@
 package org.genug.algorithm;
 
-import java.io.*;
 import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        String[] line = scanner.nextLine().split("\\s+");
-        int m = Integer.parseInt(line[0]);
-        int n = Integer.parseInt(line[1]);
-        int inven = Integer.parseInt(line[2]);
+        int testCaseCount = Integer.parseInt(scanner.nextLine());
+        while (testCaseCount > 0) {
+            String[] line = scanner.nextLine().split("\\s+");
+            int n = Integer.parseInt(line[0]);
+            int m = Integer.parseInt(line[1]);
+            line = scanner.nextLine().split("\\s+");
+            Queue<Document> queue = new LinkedList<>();
+            Queue<Integer> priorityQueue = new PriorityQueue<>(Collections.reverseOrder());
+            for (int i = 0; i < n; i++) {
+                int p = Integer.parseInt(line[i]);
+                queue.add(new Document(p, i == m));
+                priorityQueue.add(p);
+            }
 
-        Map<Integer, Integer> map = new TreeMap<>();
-        // Map<Integer, Integer> map = new TreeMap<>(Collections.reverseOrder());
-        for (int i = 0; i < m; i++) {
-            String[] blocks = scanner.nextLine().split("\\s+"); // 두번째 줄 입력받기
-            for (int j = 0; j < n; j++) {
-                int height = Integer.parseInt(blocks[j]);
-                if (map.containsKey(height)) {
-                    map.replace(height, map.get(height) + 1);
+            int result = 0;
+            while (!priorityQueue.isEmpty()) {
+                int i = priorityQueue.peek(); // 출력되어야 할 문서 중요도
+                Document document = queue.poll();
+                if (document.importance == i) {
+                    priorityQueue.poll();
+                    result++;
+                    if (document.flag)
+                        break;
                 } else {
-                    map.put(height, 1);
+                    queue.add(document);
                 }
             }
+
+            System.out.println(result);
+            testCaseCount--;
         }
-        Iterator<Map.Entry<Integer, Integer>> iterator = map.entrySet().iterator();
-        while (iterator.hasNext()) {
-            int blockAmount = inven;
-            Map.Entry<Integer, Integer> entry = iterator.next();
-            while (iterator.hasNext()) {
-                entry.getValue();
-            }
-        }
-        System.out.println(map.toString());
+
     }
+
+    static class Document {
+        int importance;
+        boolean flag;
+        public Document (int importance, boolean flag) {
+            this.importance = importance;
+            this.flag = flag;
+        }
+    }
+
 }
