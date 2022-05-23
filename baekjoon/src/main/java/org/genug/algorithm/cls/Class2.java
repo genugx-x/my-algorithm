@@ -321,7 +321,7 @@ public class Class2 {
     }
 
     // 1874 - 스택 수열
-    public static void stack() {
+    public void stackSequence() {
         Scanner scanner = new Scanner(System.in);
         int n = scanner.nextInt();
         Stack<Integer> push = new Stack<>();
@@ -508,4 +508,104 @@ public class Class2 {
         }
         System.out.println(max);
     }
+
+    // 10773 - 제로
+    public void zero() {
+        Scanner scanner = new Scanner(System.in);
+        int k = scanner.nextInt();
+        Stack<Integer> stack = new Stack<>();
+        while (k > 0) {
+            int n = scanner.nextInt();
+            if ( n > 0)
+                stack.push(n);
+            else
+                stack.pop();
+            k--;
+        }
+        // System.out.println(stack.toString());
+        int result = 0;
+        while(!stack.isEmpty()){
+            result += stack.pop();
+        }
+        System.out.println(result);
+    }
+
+    // 11866 - 요세푸스 문제 0
+    public void josephus() {
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        int k = scanner.nextInt();
+
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 1; i <= n; i++) {
+            queue.add(i);
+        }
+
+        int count = 0;
+        List<Integer> josephus = new ArrayList<>();
+        while (!queue.isEmpty()) {
+            int i = queue.poll();
+            if (++count < k) {
+                queue.add(i);
+            } else {
+                count = 0;
+                josephus.add(i);
+            }
+        }
+
+        System.out.print("<");
+        for (int i = 0; i < josephus.size(); i++) {
+            System.out.print(josephus.get(i));
+            if (i < josephus.size()-1) {
+                System.out.print(", ");
+            }
+        }
+        System.out.print(">");
+    }
+
+    // 10828 - 스택
+    public void stack() {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        try {
+            int count = Integer.parseInt(br.readLine());
+            Stack<Integer> stack = new Stack<>();
+            while(count > 0) {
+                String[] commands = br.readLine().split("\\s+");
+                switch (commands[0]) {
+                    case "push":
+                        stack.push(Integer.parseInt(commands[1]));
+                        break;
+                    case "pop":
+                        if (stack.isEmpty())
+                            bw.write(-1 + "\n");
+                        else
+                            bw.write(stack.pop() + "\n");
+                        break;
+                    case "size":
+                        bw.write(stack.size() + "\n");
+                        break;
+                    case "empty":
+                        if (stack.isEmpty())
+                            bw.write(1 + "\n");
+                        else
+                            bw.write(0 + "\n");
+                        break;
+                    case "top":
+                        if (stack.isEmpty())
+                            bw.write(-1 + "\n");
+                        else
+                            bw.write(stack.peek() + "\n");
+                        break;
+                }
+                count--;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { br.close(); } catch (IOException ioe) {};
+            try { bw.close(); } catch (IOException ioe) {};
+        }
+    }
+
 }
