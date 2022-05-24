@@ -608,4 +608,72 @@ public class Class2 {
         }
     }
 
+    // 10989 - 수 정렬하기 3
+    public void sortNumber3() {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        try {
+            int n = Integer.parseInt(br.readLine());
+            boolean[] arr = new boolean[100000001];
+            Map<Integer, Integer> map = new HashMap<>();
+            while (n > 0) {
+                int i = Integer.parseInt(br.readLine());
+                if (!arr[i]) {
+                    arr[i] = true;
+                } else {
+                    if (map.containsKey(i))
+                        map.replace(i, map.get(i) + 1);
+                    else
+                        map.put(i, 2);
+                }
+                n--;
+            }
+            for (int i = 1; i < arr.length; i++) {
+                if (arr[i])
+                    if (map.containsKey(i)) {
+                        for (int j = 0; j < map.get(i); j++) {
+                            bw.write(i + "\n");
+                        }
+                    } else
+                        bw.write(i + "\n");
+            }
+            bw.flush();
+        } catch (IOException e) {
+        } finally {
+            try { br.close(); } catch (IOException e) {}
+            try { bw.close(); } catch (IOException e) {}
+        }
+    }
+
+    // 10816 - 숫자 카드 2
+    public void numberCard2() {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        try {
+            int n = Integer.parseInt(br.readLine());
+
+            Map<Integer, Integer> map = new HashMap<>();
+            String[] line = br.readLine().split("\\s+");
+            for (String s : line) {
+                int i = Integer.parseInt(s);
+                if (!map.containsKey(i)) {
+                    map.put(i, 0);
+                }
+                map.replace(i, map.get(i) + 1);
+            }
+            int m = Integer.parseInt(br.readLine());
+            line = br.readLine().split("\\s+");
+            for (String s : line) {
+                int i = Integer.parseInt(s);
+                int j = map.get(i) == null ? 0 : map.get(i);
+                bw.write(j + " ");
+                m--;
+            }
+            bw.flush();
+        } catch (IOException e) {
+        } finally {
+            try { br.close(); } catch (IOException e) {}
+            try { bw.close(); } catch (IOException e) {}
+        }
+    }
 }
