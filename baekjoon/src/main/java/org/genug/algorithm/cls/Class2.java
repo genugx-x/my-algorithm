@@ -676,4 +676,30 @@ public class Class2 {
             try { bw.close(); } catch (IOException e) {}
         }
     }
+
+    // 1920 - 수 찾기
+    public void findNumber() {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        try {
+            br.readLine();
+            Map<Integer, Integer> map = new HashMap<>();
+            String[] line = br.readLine().split("\\s+");
+            for (String s : line) {
+                map.put(Integer.parseInt(s),1);
+            }
+            br.readLine();
+            line = br.readLine().split("\\s+");
+            for (String s : line) {
+                int i = Integer.parseInt(s);
+                int j = map.get(i) == null ? 0 : map.get(i);
+                bw.write(j + "\n");
+            }
+            bw.flush();
+        } catch (IOException e) {
+        } finally {
+            try { br.close(); } catch (IOException e) {}
+            try { bw.close(); } catch (IOException e) {}
+        }
+    }
 }
