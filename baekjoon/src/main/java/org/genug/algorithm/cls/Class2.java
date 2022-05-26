@@ -702,4 +702,184 @@ public class Class2 {
             try { bw.close(); } catch (IOException e) {}
         }
     }
+
+    // 4949 - 균형잡힌 세상
+    public void balancedWorld() {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        try {
+            while (true) {
+                String input = br.readLine();
+                if (input.equals("."))
+                    break;
+                char[] chars = input.toCharArray();
+                Stack<Character> stack = new Stack<>();
+                boolean flag = true;
+                for (char c : chars) {
+                    try {
+                        switch (c) {
+                            case '[':
+                            case '(':
+                                stack.push(c);
+                                break;
+                            case ']':
+                                char ch = stack.pop();
+                                if (ch != '[')
+                                    throw new EmptyStackException();
+                                break;
+                            case ')':
+                                ch = stack.pop();
+                                if (ch != '(')
+                                    throw new EmptyStackException();
+                                break;
+                        }
+                    } catch (EmptyStackException e) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag && stack.isEmpty())
+                    bw.write("yes" + "\n");
+                else
+                    bw.write("no" + "\n");
+                bw.flush();
+            }
+        } catch (IOException ignored) {
+        } finally {
+            try { br.close(); } catch (IOException ignored) {}
+            try { bw.close(); } catch (IOException ignored) {}
+        }
+    }
+
+
+    // 1654 - 랜선 자르기 (풀이중 - 미해결) 시간초과
+    public int cableCount;
+    public void cutLanCable() {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        try {
+            String[] input = br.readLine().split("\\s+");
+            int k = Integer.parseInt(input[0]);
+            int n = Integer.parseInt(input[1]);
+
+            int totalLength = 0;
+            List<Integer> cables = new ArrayList<>();
+            for (int i = 0; i < k; i++) {
+                int cable = Integer.parseInt(br.readLine());
+                totalLength += cable;
+                cables.add(cable);
+            }
+
+            int min = 0;
+            int max = 0;
+            int cableLength = totalLength / n;
+            while (true) {
+                // System.out.println("랜선 길이(" + max + ", " + min + ") : " + cableLength + "(cm)");
+                cableCount = 0;
+                for (int length : cables) {
+                    // System.out.println(length + " : " + length / cableLength + " ");
+                    cableCount += length / cableLength;
+                }
+                // System.out.println(cableLength + "(cm) 로 만들 수 있은 랜선 수 :" + cableCount);
+                if (cableCount < n) {
+                    max = cableLength;
+                    cableLength -= (max-min)/2;
+                } else if (cableCount > n) {
+                    min = cableLength;
+                    cableLength += (max-min)/2;
+                } else {
+                    // System.out.println("시작");
+                    int tempCableLength = cableLength;
+                    int tempMax;
+                    while (true) {
+                        tempMax = tempCableLength;
+                        tempCableLength -= (tempMax-min)/2;
+                        int tempCableCount = 0;
+                        for (int length : cables) {
+                            // System.out.println(length + " : " + length / tempCableLength + " ");
+                            tempCableCount += length / tempCableLength;
+                        }
+                        // System.out.println(tempCableLength + "(cm) 로 만들 수 있은 랜선 수 :" + tempCableCount);
+                        if (cableCount == tempCableCount) {
+                            if (cableLength < tempCableLength)
+                                cableLength = tempCableLength;
+                        } else {
+                            break;
+                        }
+                    }
+                    tempCableLength = cableLength;
+                    int tempMin;
+                    while (true) {
+                        tempMin = tempCableLength;
+                        tempCableLength += (max-tempMin)/2;
+                        int tempCableCount = 0;
+                        for (int length : cables) {
+                            // System.out.println(length + " : " + length / tempCableLength + " ");
+                            tempCableCount += length / tempCableLength;
+                        }
+                        // System.out.println(tempCableLength + "(cm) 로 만들 수 있은 랜선 수 :" + tempCableCount);
+                        if (cableCount == tempCableCount) {
+                            if (cableLength < tempCableLength)
+                                cableLength = tempCableLength;
+                        } else {
+                            break;
+                        }
+                    }
+                    break;
+                }
+                // System.out.println(cableCount);
+                // System.out.println();
+            }
+            bw.write(cableLength);
+            bw.flush();
+        } catch (IOException ignored) {
+        } finally {
+            try { br.close(); } catch (IOException ignored) {}
+            try { bw.close(); } catch (IOException ignored) {}
+        }
+    }
+/*
+    public int getLength(List<Integer> cables, int cableLength) {
+        int tempCableCount = 0;
+        for (int length : cables) {
+            cableCount += length / cableLength;
+        }
+        // System.out.println(cableLength + "(cm) 로 만들 수 있은 랜선 수 :" + cableCount);
+        if (cableCount == tempCableCount) {
+            if (cableLength < tempCableLength)
+                cableLength = tempCableLength;
+        } else {
+            break;
+        }
+    }
+
+ */
+
+    // 소수 찾기
+    public void findPrimeNumber() {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        try {
+            String[] line = br.readLine().split("\\s+");
+            int m = Integer.parseInt(line[0]);
+            int n = Integer.parseInt(line[1]);
+            for (; m <= n; m++) {
+                boolean flag = true;
+                if (m == 1) continue;
+                for (int i = 2; i*i <= m; i++) {
+                    if (m%i == 0) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag)
+                    bw.write(m + "\n");
+                bw.flush();
+            }
+        } catch (IOException ignored) {
+        } finally {
+            try { br.close(); } catch (IOException ignored) {}
+            try { bw.close(); } catch (IOException ignored) {}
+        }
+    }
 }
