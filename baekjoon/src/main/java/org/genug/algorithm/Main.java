@@ -1,40 +1,18 @@
 package org.genug.algorithm;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String[] input = scanner.nextLine().split("\\s+");
+        int n = Integer.parseInt(input[0]);
+        int m = Integer.parseInt(input[1]);
+        while (m > 0) {
+            input = scanner.nextLine().split("\\s+");
 
-        String[] line = br.readLine().split("\\s+");
-        int k = Integer.parseInt(line[0]);
-        int n = Integer.parseInt(line[1]);
-
-        int totalCableLength = 0;
-        List<Integer> cables = new ArrayList<>();
-        while (k > 0) {
-            int cable = Integer.parseInt(br.readLine());
-            totalCableLength += cable;
-            cables.add(cable);
-            k--;
-        }
-        int cuttingSize = (totalCableLength / n);
-        System.out.println("cuttingSize (start): " + cuttingSize);
-        int max = 0;
-        int min = 0;
-
-        int cuttedCableCount = 0;
-        for (Integer cable : cables) {
-            int eachCuttedCableCount = (cable / cuttingSize);
-            cuttedCableCount += eachCuttedCableCount;
+            m--;
         }
 
-        double newCuttingSize = cuttedCableCount
-
-        br.close();
-        bw.close();
     }
 }
