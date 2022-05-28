@@ -193,4 +193,46 @@ public class Class3 {
             this.flag = false;
         }
     }
+
+    // 11724 - 연결 요소의 개수
+    public void numberOfConnectingElements() {
+        Scanner scanner = new Scanner(System.in);
+        String[] input = scanner.nextLine().split("\\s+");
+        int n = Integer.parseInt(input[0]);
+        int m = Integer.parseInt(input[1]);
+        boolean[] visited = new boolean[n+1];
+        Map<Integer, List<Integer>> map = new TreeMap<>();
+        for (int i = 1; i <= n; i++) {
+            map.put(i, new ArrayList<>());
+        }
+        while (m > 0) {
+            input = scanner.nextLine().split("\\s+");
+            int a = Integer.parseInt(input[0]);
+            int b = Integer.parseInt(input[1]);
+            map.get(a).add(b);
+            map.get(b).add(a);
+            m--;
+        }
+        int result = 0;
+        for (int i = 1; i <= n; i++) {
+            if (!visited[i]) {
+                result++;
+                visited[i] = true;
+                dfs(visited, map, i);
+            }
+        }
+        System.out.println(result);
+    }
+
+    public void dfs(boolean[] visited, Map<Integer, List<Integer>> map, int n) {
+        if (!visited[n])
+            visited[n] = true;
+        if (map.get(n) == null)
+            return;
+        for (Integer i : map.get(n)) {
+            if (!visited[i])
+                dfs(visited, map, i);
+        }
+
+    }
 }
