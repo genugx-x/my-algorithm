@@ -98,99 +98,100 @@ public class Class3 {
         }
     }
 
-    public void dfsBfs() {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        try {
-            String[] line = br.readLine().split("\\s+");
-            int count = Integer.parseInt(line[0]);
-            int inputCount = Integer.parseInt(line[1]);
-            int startPoint = Integer.parseInt(line[2]);
-            Map<Integer, SearchInfo> dfsMap = new HashMap<>();
-            Map<Integer, SearchInfo> bfsMap = new HashMap<>();
-            List<int[]> list = new ArrayList<>();
-            while (inputCount > 0) {
-                line = br.readLine().split("\\s+");
-                int[] numbers = {Integer.parseInt(line[0]), Integer.parseInt(line[1])};
+    // 1260 - DFS와 BFS (완료)
+    // BFS의 로직의 흐름을 잘못 구현한 것과 문제의 설명이 부족하다고 생각
+    // 1. 주어진 시작지점 v 부터 탐색 지점이 끝나면 다른 연결되지 않은 간선은 필요없었다.
+    // 2. m개 만큼 입력된 간선에 v는 없을 수도 있다. 따라서 입력 간선들에 v가 없다면 v만 출력하면 된다.
+    public void dfsAndBfs() {
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        int m = scanner.nextInt();
+        int v = scanner.nextInt();
 
-                int f = numbers[0];
-                int b = numbers[1];
-
-                dfsMap.putIfAbsent(f, new SearchInfo());
-                dfsMap.putIfAbsent(b, new SearchInfo());
-                dfsMap.get(f).list.add(b);
-                dfsMap.get(b).list.add(f);
-
-                bfsMap.putIfAbsent(f, new SearchInfo());
-                bfsMap.putIfAbsent(b, new SearchInfo());
-                bfsMap.get(f).list.add(b);
-                bfsMap.get(b).list.add(f);
-
-                list.add(numbers);
-                inputCount--;
-
+        Map<Integer, Node> dfsMap = new HashMap<>();
+        Map<Integer, Node> bfsMap = new HashMap<>();
+        List<Integer> inputs = new ArrayList<>();
+        inputs.add(v);
+        while (m > 0) {
+            int a = scanner.nextInt();
+            int b = scanner.nextInt();
+            if (!dfsMap.containsKey(a)) {
+                dfsMap.put(a, new Node(a));
+                bfsMap.put(a, new Node(a));
             }
-            List<Integer> result = new ArrayList<>();
-            dfs(startPoint, dfsMap, result);
-            for (int i = 0; i < result.size(); i++) {
-                System.out.print(result.get(i));
-                if (i < result.size()-1) {
-                    System.out.print(" ");
+            if (!dfsMap.containsKey(b)) {
+                dfsMap.put(b, new Node(b));
+                bfsMap.put(b, new Node(b));
+            }
+            if (!inputs.contains(a))
+                inputs.add(a);
+
+            dfsMap.get(a).neighbors.add(b);
+            dfsMap.get(b).neighbors.add(a);
+            bfsMap.get(a).neighbors.add(b);
+            bfsMap.get(b).neighbors.add(a);
+            m--;
+        }
+        for (Map.Entry<Integer, Node> entry : dfsMap.entrySet()) {
+            entry.getValue().sort();
+            bfsMap.get(entry.getKey()).sort();
+        }
+        if (dfsMap.get(v) == null) {
+            System.out.print(v + "\n" + v);
+            return;
+        }
+        dfs(dfsMap, v);
+        System.out.println();
+        Queue<Integer> queue = new LinkedList<>();
+
+        bfsMap.get(v).visitFlag = true;
+        queue.add(v);
+        System.out.print(v);
+        bfs(bfsMap, queue);
+    }
+
+    void dfs(Map<Integer, Node > map, int n) {
+        Node node =  map.get(n);
+        if (node != null && !node.visitFlag) {
+            System.out.print(n);
+            node.visitFlag = true;
+        } else {
+            return;
+        }
+        System.out.print(" ");
+        for (int i : map.get(n).neighbors) {
+            dfs(map, i);
+        }
+    }
+
+    void bfs(Map<Integer, Node > map, Queue<Integer> queue) {
+        while (!queue.isEmpty()) {
+            int n = queue.poll();
+            for (int i : map.get(n).neighbors) {
+                Node neighbor = map.get(i);
+                if (neighbor != null && !neighbor.visitFlag) {
+                    System.out.print(" " + i);
+                    neighbor.visitFlag = true;
+                    queue.add(i);
                 }
             }
-            System.out.println();
-            result = new ArrayList<>();
-            result.add(startPoint);
-            bfsMap.get(startPoint).flag = true;
-            bfs(startPoint, bfsMap, result, count);
-            for (int i = 0; i < result.size(); i++) {
-                System.out.print(result.get(i));
-                if (i < result.size()-1) {
-                    System.out.print(" ");
-                }
-            }
-
-        } catch(Exception e) {
-            e.printStackTrace();
-        } finally {
-            try { br.close(); } catch(IOException ioe) {}
-        }
-    }
-    void dfs(int searchPoint, Map<Integer, SearchInfo> map, List<Integer> result) {
-        SearchInfo info = map.get(searchPoint);
-        info.flag = true;
-        result.add(searchPoint);
-        while(!info.list.isEmpty()) {
-            int next = info.list.get(0);
-            info.list.remove(0);
-            if (!map.get(next).flag) {
-                dfs(next, map, result);
-            }
         }
     }
 
-    void bfs(int searchPoint, Map<Integer, SearchInfo> map, List<Integer> result, int count) {
-        SearchInfo info = map.get(searchPoint);
-        Collections.sort(info.list);
-        info.list.forEach(next -> {
-            if (!map.get(next).flag) {
-                map.get(next).flag = true;
-                result.add(next);
-            }
-        });
-        while(result.size() < count && !info.list.isEmpty()) {
-            int next = info.list.get(0);
-            info.list.remove(0);
-            bfs(next, map, result, count);
+    class Node {
+        Integer number;
+        List<Integer> neighbors;
+        Boolean visitFlag;
+
+
+        public Node(int number) {
+            this.number = number;
+            this.neighbors = new ArrayList<>();
+            this.visitFlag = false;
         }
-    }
 
-    class SearchInfo {
-        List<Integer> list;
-        Boolean flag;
-
-        public SearchInfo() {
-            this.list = new ArrayList<>();
-            this.flag = false;
+        void sort() {
+            Collections.sort(neighbors);
         }
     }
 
@@ -235,4 +236,5 @@ public class Class3 {
         }
 
     }
+    
 }
