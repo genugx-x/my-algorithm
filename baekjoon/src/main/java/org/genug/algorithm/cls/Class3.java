@@ -236,5 +236,81 @@ public class Class3 {
         }
 
     }
+
+    // 2667 - 단지번호 붙이기
+    public void apartmentComplexNumbering() {
+        Scanner scanner = new Scanner(System.in);
+        int n = Integer.parseInt(scanner.nextLine());
+        boolean[][] visited = new boolean[n][n];
+        boolean[][] arr = new boolean[n][n];
+        for (int i = 0; i < arr.length; i++) {
+            char[] chars = scanner.nextLine().toCharArray();
+            for (int j = 0; j < arr[i].length; j++) {
+                arr[i][j] = (chars[j] == '1');
+            }
+        }
+
+        List<Integer> results = new ArrayList<>();
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr[i].length; j++) {
+                if (!visited[i][j]) {
+                    visited[i][j] = true;
+                    if (arr[i][j]) {
+                        int result = search(i, j, visited, arr) + 1;
+                        System.out.println("startpoint : " + i + " " + j + " : " + result);
+                        results.add(result);
+                        System.out.println();
+                        System.out.println();
+                    }
+                }
+            }
+        }
+
+//        for (boolean[] barr : visited) {
+//            System.out.println(Arrays.toString(barr));
+//        }
+        System.out.println(results.size());
+        Collections.sort(results);
+        for (int result : results) {
+            System.out.println(result);
+        }
+    }
+    public int search(int i, int j, boolean[][] visited, boolean[][] arr) {
+        int result = 0;
+        int length = visited.length;
+        // 좌
+        if (j-1 >= 0 && !visited[i][j-1]) {
+            visited[i][j-1] = true;
+            if (arr[i][j-1]) {
+                result++;
+                result += search(i, j-1, visited, arr);
+            }
+        }
+        // 우
+        if (j+1 < length && !visited[i][j+1]) {
+            visited[i][j+1] = true;
+            if (arr[i][j+1]) {
+                result++;
+                result += search(i, j+1, visited, arr);
+            }
+        }
+        // 상
+        if (i-1 >= 0 && !visited[i-1][j]) {
+            visited[i-1][j] = true;
+            if (arr[i-1][j]) {
+                result++;
+                result += search(i-1, j, visited, arr);
+            }
+        }
+        // 하
+        if (i+1 < length && !visited[i+1][j]) {
+            visited[i+1][j] = true;
+            if (arr[i+1][j]) {
+                result++;
+                result += search(i+1, j, visited, arr);
+            }
+        }
+        return result;
+    }
     
 }
