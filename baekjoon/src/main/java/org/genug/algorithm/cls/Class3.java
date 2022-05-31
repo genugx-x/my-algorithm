@@ -150,7 +150,7 @@ public class Class3 {
         bfs(bfsMap, queue);
     }
 
-    void dfs(Map<Integer, Node > map, int n) {
+    void dfs(Map<Integer, Node> map, int n) {
         Node node =  map.get(n);
         if (node != null && !node.visitFlag) {
             System.out.print(n);
@@ -164,7 +164,7 @@ public class Class3 {
         }
     }
 
-    void bfs(Map<Integer, Node > map, Queue<Integer> queue) {
+    void bfs(Map<Integer, Node> map, Queue<Integer> queue) {
         while (!queue.isEmpty()) {
             int n = queue.poll();
             for (int i : map.get(n).neighbors) {
@@ -311,6 +311,85 @@ public class Class3 {
             }
         }
         return result;
+    }
+
+
+    // 2178 - 미로탐색
+    public void eploreTheMaze() {
+        Scanner scanner = new Scanner(System.in);
+        String[] input = scanner.nextLine().split("\\s+");
+        int n = Integer.parseInt(input[0]);
+        int m = Integer.parseInt(input[1]);
+        boolean[][] arr = new boolean[n][m];
+        boolean[][] visited = new boolean[n][m];
+            for (int i = 0; i < n; i++) {
+            char[] chars = scanner.nextLine().toCharArray();
+            for (int j = 0; j < m; j++) {
+                arr[i][j] = (chars[j] == '1');
+            }
+        }
+        start(visited, arr);
+    }
+
+    Queue<Queue<int[]>> queue = new LinkedList<>();
+    public void start(boolean[][] visited, boolean[][] arr) {
+        Queue<int[]> temp = new LinkedList<>();
+        temp.add(new int[] {0, 0, 0});
+        queue.add(temp);
+
+        while (!queue.isEmpty()) {
+            Queue<int[]> inner = queue.poll();
+            Queue<int[]> next = new LinkedList<>();
+            while (!inner.isEmpty()) {
+                int[] iarr = inner.poll();
+                int i = iarr[0];
+                int j = iarr[1];
+                int count = iarr[2];
+                search(i, j, visited, arr, next, count);
+            }
+            if (!next.isEmpty())
+                queue.add(next);
+        }
+    }
+
+    public void search(int i, int j, boolean[][] visited, boolean[][] arr, Queue<int[]> next, int count) {
+        int n = visited.length;
+        int m = visited[0].length;
+
+        count++;
+
+        if (i+1 == n && j+1 == m) {
+            System.out.println(count);
+            return;
+        }
+        // 하
+        if (i+1 < n && !visited[i+1][j]) {
+            if (arr[i+1][j]) {
+                visited[i+1][j] = true;
+                next.add(new int[] {i+1, j, count});
+            }
+        }
+        // 우
+        if (j+1 < m && !visited[i][j+1]) {
+            if (arr[i][j+1]) {
+                visited[i][j+1] = true;
+                next.add(new int[] {i, j+1, count});
+            }
+        }
+        // 상
+        if (i-1 >= 0 && !visited[i-1][j]) {
+            if (arr[i-1][j]) {
+                visited[i-1][j] = true;
+                next.add(new int[] {i-1, j, count});
+            }
+        }
+        // 좌
+        if (j-1 >= 0 && !visited[i][j-1]) {
+            if (arr[i][j-1]) {
+                visited[i][j-1] = true;
+                next.add(new int[] {i, j-1, count});
+            }
+        }
     }
     
 }
