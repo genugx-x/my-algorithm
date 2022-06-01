@@ -882,4 +882,5 @@ public class Class2 {
             try { bw.close(); } catch (IOException ignored) {}
         }
     }
+
 }
