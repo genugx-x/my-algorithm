@@ -525,5 +525,47 @@ public class Class3 {
             next.add(new int[] {i, j-1});
         }
     }
+
+    Queue<int[]> queue1697 = new LinkedList<>();
+    public void hideAndSeek() {
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        int k = scanner.nextInt();
+        boolean[] visited = new boolean[100001];
+
+        visited[n] = true;
+        queue1697.add(new int[]{n, 0});
+        while (!queue1697.isEmpty()) {
+            int[] info = queue1697.poll();
+            if (info[0] == k) {
+                System.out.println(info[1]);
+                break;
+            }
+            dfs(info, visited);
+        }
+    }
+
+    public void dfs(int[] info, boolean[] visited) {
+        int x = info[0];
+        int count = info[1]+1;
+
+        // 걷기 -1
+        if (x-1 >= 0 && !visited[x-1]) {
+            visited[x-1] = true;
+            queue1697.add(new int[] {x-1, count});
+        }
+
+        // 걷기 +1
+        if (x+1 < visited.length && !visited[x+1]) {
+            visited[x+1] = true;
+            queue1697.add(new int[] {x+1, count});
+        }
+
+        // 순간이동
+        if (x*2 < visited.length && !visited[x*2]) {
+            visited[x*2] = true;
+            queue1697.add(new int[] {x*2, count});
+        }
+    }
     
 }
