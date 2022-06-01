@@ -3,52 +3,91 @@ package org.genug.algorithm;
 import java.util.*;
 
 public class Main {
+
+    static Queue<Queue<int[]>> queue = new LinkedList<>();
+    static int zeroCount = 0;
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        int n = Integer.parseInt(scanner.nextLine());
+        String[] input = scanner.nextLine().split("\\s+");
+        int m = Integer.parseInt(input[0]);
+        int n = Integer.parseInt(input[1]);
 
-        int m = Integer.parseInt(scanner.nextLine());
-        Computer[] computers = new Computer[n+1];
-        for (int i = 1; i < computers.length; i++) {
-            computers[i] = new Computer(i);
+        int[][] storage = new int[n][m];
+        Queue<int[]> iarrs = new LinkedList<>(); // 시작점 기록
+        for (int i = 0; i < storage.length; i++) {
+            for (int j = 0; j < storage[i].length; j++) {
+                int t = scanner.nextInt();
+                storage[i][j] = t;
+                if (t == 1)
+                    iarrs.add(new int[]{i, j});
+                else if (t == 0)
+                    zeroCount++;
+
+            }
         }
-        while (m > 0) {
-            String[] inputs = scanner.nextLine().split("\\s+");
-            int a = Integer.parseInt(inputs[0]);
-            int b = Integer.parseInt(inputs[1]);
-
-            if (!computers[a].networks.contains(b))
-                computers[a].networks.add(b);
-            if (!computers[b].networks.contains(a))
-                computers[b].networks.add(a);
-            m--;
-        }
-
-        int result = dfs(1, computers)-1; // 1번 제외
-        System.out.println(result);
+        queue.add(iarrs);
+        start(storage);
     }
 
-    public static int dfs(int n, Computer[] computers) {
-        int result = 1;
-        Computer com = computers[n];
-        com.visitFlag = true;
-        for (int i = 0; i < com.networks.size(); i++) {
-            int network = com.networks.get(i);
-            if (!computers[network].visitFlag)
-                result += dfs(network, computers);
+
+    public static void start(int[][] storage) {
+        int day = 0;
+        while (!queue.isEmpty()) {
+
+            System.out.println("day : " + day +", zeroCount : " + zeroCount);
+            for (int[] ints : storage) {
+                System.out.println(Arrays.toString(ints));
+            }
+            System.out.println("=====================");
+
+            Queue<int[]> q = queue.poll();
+            Queue<int[]> next = new LinkedList<>();
+            while (!q.isEmpty()) {
+                int[] coordinate = q.poll();
+                search(coordinate[0], coordinate[1], storage, next);
+            }
+            if (next.size() > 0) {
+                queue.add(next);
+                day++;
+            } else
+                break;
+
+            try {
+                Thread.sleep(1000);
+            } catch (Exception ignored) {}
         }
-        return result;
+        if (zeroCount > 0)
+            day = -1;
+        System.out.println(day);
     }
 
-    static class Computer {
-        Integer number;
-        Boolean visitFlag;
-        List<Integer> networks;
+    public static void search(int i, int j, int[][] storage, Queue<int[]> next) {
+        int n = storage.length;
+        int m = storage[0].length;
 
-        public Computer(int number) {
-            this.number = number;
-            this.visitFlag = false;
-            this.networks = new ArrayList<>();
+        if (i+1 < n && storage[i+1][j] == 0) {
+                storage[i+1][j] = 1;
+                zeroCount--;
+                next.add(new int[] {i+1, j});
+        }
+
+        if (j+1 < m && storage[i][j+1] == 0) {
+            storage[i][j+1] = 1;
+            zeroCount--;
+            next.add(new int[] {i, j+1});
+        }
+
+        if (i-1 >= 0 && storage[i-1][j] == 0) {
+            storage[i-1][j] = 1;
+            zeroCount--;
+            next.add(new int[] {i-1, j});
+        }
+
+        if (j-1 >= 0 && storage[i][j-1] == 0) {
+            storage[i][j-1] = 1;
+            zeroCount--;
+            next.add(new int[] {i, j-1});
         }
     }
 }
