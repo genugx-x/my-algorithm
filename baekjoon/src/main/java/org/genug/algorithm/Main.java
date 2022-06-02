@@ -4,90 +4,68 @@ import java.util.*;
 
 public class Main {
 
-    static Queue<Queue<int[]>> queue = new LinkedList<>();
-    static int zeroCount = 0;
-
+    static List<Integer> results = new ArrayList<>();
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         String[] input = scanner.nextLine().split("\\s+");
-        int m = Integer.parseInt(input[0]);
-        int n = Integer.parseInt(input[1]);
+        int r = Integer.parseInt(input[0]);
+        int c = Integer.parseInt(input[1]);
 
-        int[][] storage = new int[n][m];
-        Queue<int[]> iarrs = new LinkedList<>(); // 시작점 기록
-        for (int i = 0; i < storage.length; i++) {
-            for (int j = 0; j < storage[i].length; j++) {
-                int t = scanner.nextInt();
-                storage[i][j] = t;
-                if (t == 1)
-                    iarrs.add(new int[]{i, j});
-                else if (t == 0)
-                    zeroCount++;
-
+        char[][] alphabets = new char[r][c];
+        boolean[][] visited = new boolean[r][c];
+        Map<Character, Boolean> map = new HashMap<>();
+        for (int i = 0; i < r; i++) {
+            char[] chars = scanner.nextLine().toCharArray();
+            for (int j = 0; j < c; j++) {
+                alphabets[i][j] = chars[j];
+                if (!map.containsKey(chars[j]))
+                    map.put(chars[j], false);
             }
         }
-        queue.add(iarrs);
-        start(storage);
+        search(0, 0, alphabets, visited, map, 0);
+
+        results.sort(Collections.reverseOrder());
+        System.out.println(results.get(0));
     }
 
+    static void search(int r, int c, char[][] alphabets, boolean[][] visited, Map<Character, Boolean> map, int result) {
+        boolean flag = false;
+        int n = visited.length;
+        int m = visited[0].length;
 
-    public static void start(int[][] storage) {
-        int day = 0;
-        while (!queue.isEmpty()) {
+        result++;
+        visited[r][c] = true;
+        map.replace(alphabets[r][c], true);
 
-            System.out.println("day : " + day +", zeroCount : " + zeroCount);
-            for (int[] ints : storage) {
-                System.out.println(Arrays.toString(ints));
+        if (r +1 < n && !visited[r + 1][c]) {
+            if (!map.get(alphabets[r + 1][c])) {
+                search(r + 1, c, alphabets, visited, map, result);
+                flag = true;
             }
-            System.out.println("=====================");
-
-            Queue<int[]> q = queue.poll();
-            Queue<int[]> next = new LinkedList<>();
-            while (!q.isEmpty()) {
-                int[] coordinate = q.poll();
-                search(coordinate[0], coordinate[1], storage, next);
+        }
+        if (c + 1 < m && !visited[r][c + 1]) {
+            if (!map.get(alphabets[r][c + 1])) {
+                search(r, c + 1, alphabets, visited, map, result);
+                flag = true;
             }
-            if (next.size() > 0) {
-                queue.add(next);
-                day++;
-            } else
-                break;
-
-            try {
-                Thread.sleep(1000);
-            } catch (Exception ignored) {}
         }
-        if (zeroCount > 0)
-            day = -1;
-        System.out.println(day);
+        if (r - 1 >= 0 && !visited[r - 1][c]) {
+            if (!map.get(alphabets[r - 1][c])) {
+                search(r - 1, c, alphabets, visited, map, result);
+                flag = true;
+            }
+        }
+        if (c - 1 >= 0 && !visited[r][c - 1]) {
+            if (!map.get(alphabets[r][c - 1])) {
+                search(r, c - 1, alphabets, visited, map, result);
+                flag = true;
+            }
+        }
+
+        map.replace(alphabets[r][c], false);
+        visited[r][c] = false;
+        if(!flag)
+            results.add(result);
     }
 
-    public static void search(int i, int j, int[][] storage, Queue<int[]> next) {
-        int n = storage.length;
-        int m = storage[0].length;
-
-        if (i+1 < n && storage[i+1][j] == 0) {
-                storage[i+1][j] = 1;
-                zeroCount--;
-                next.add(new int[] {i+1, j});
-        }
-
-        if (j+1 < m && storage[i][j+1] == 0) {
-            storage[i][j+1] = 1;
-            zeroCount--;
-            next.add(new int[] {i, j+1});
-        }
-
-        if (i-1 >= 0 && storage[i-1][j] == 0) {
-            storage[i-1][j] = 1;
-            zeroCount--;
-            next.add(new int[] {i-1, j});
-        }
-
-        if (j-1 >= 0 && storage[i][j-1] == 0) {
-            storage[i][j-1] = 1;
-            zeroCount--;
-            next.add(new int[] {i, j-1});
-        }
-    }
 }
