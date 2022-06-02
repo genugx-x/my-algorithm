@@ -567,5 +567,95 @@ public class Class3 {
             queue1697.add(new int[] {x*2, count});
         }
     }
-    
+
+    // 4963 - 섬의 개수
+    public void numberOfIslands() {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            String[] input = scanner.nextLine().split("\\s+");
+            int w = Integer.parseInt(input[0]);
+            int h = Integer.parseInt(input[1]);
+            if (w+h == 0) {
+                break;
+            }
+            boolean[][] map = new boolean[h][w];
+            boolean[][] visited = new boolean[h][w];
+            for (int i = 0; i < h; i++) {
+                input = scanner.nextLine().split("\\s+");
+                for (int j = 0; j < w; j++) {
+                    map[i][j] = input[j].equals("1");
+                }
+            }
+            int result = 0;
+            for (int i = 0; i < map.length; i++) {
+                for (int j = 0; j < map[i].length; j++) {
+                    if (!visited[i][j]) {
+                        if (map[i][j]) {
+                            visited[i][j] = true;
+                            dfs(i, j, map, visited);
+                            result++;
+                        }
+                    }
+                }
+            }
+            System.out.println(result);
+        }
+    }
+    void dfs(int h, int w, boolean[][] map, boolean[][] visited) {
+
+        int n = visited.length;
+        int m = visited[0].length;
+
+        // 상하좌우 탐색
+        // 아래
+        if (h+1 < n && !visited[h+1][w]) {
+            visited[h+1][w] = true;
+            if (map[h+1][w])
+                dfs(h+1, w, map, visited);
+        }
+        // 오른쪽
+        if (w+1 < m && !visited[h][w+1]) {
+            visited[h][w+1] = true;
+            if (map[h][w+1])
+                dfs(h, w+1, map, visited);
+        }
+        // 위
+        if (h-1 >= 0 && !visited[h-1][w]) {
+            visited[h-1][w] = true;
+            if (map[h-1][w])
+                dfs(h-1, w, map, visited);
+        }
+        // 왼쪽
+        if (w-1 >= 0 && !visited[h][w-1]) {
+            visited[h][w-1] = true;
+            if (map[h][w-1])
+                dfs(h, w-1, map, visited);
+        }
+
+        // 대각선 탐색
+        // 오른쪽 아래
+        if (h+1 < n && w+1 < m && !visited[h+1][w+1]) {
+            visited[h+1][w+1] = true;
+            if (map[h+1][w+1])
+                dfs(h+1, w+1, map, visited);
+        }
+        // 왼쪽 아래
+        if (h+1 < n  && w-1 >= 0 && !visited[h+1][w-1]) {
+            visited[h+1][w-1] = true;
+            if (map[h+1][w-1])
+                dfs(h+1, w-1, map, visited);
+        }
+        // 오른쪽 위
+        if (h-1 >= 0 && w+1 < m && !visited[h-1][w+1]) {
+            visited[h-1][w+1] = true;
+            if (map[h-1][w+1])
+                dfs(h-1, w+1, map, visited);
+        }
+        // 왼쪽 위
+        if (h-1 >= 0 && w-1 >= 0 && !visited[h-1][w-1]) {
+            visited[h-1][w-1] = true;
+            if (map[h-1][w-1])
+                dfs(h-1, w-1, map, visited);
+        }
+    }
 }
