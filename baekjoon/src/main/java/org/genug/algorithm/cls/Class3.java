@@ -857,4 +857,123 @@ public class Class3 {
         return result;
     }
 
+    boolean flag;
+    public void countFamily() {
+        Scanner scanner = new Scanner(System.in);
+        int n = Integer.parseInt(scanner.nextLine());
+        String[] input = scanner.nextLine().split("\\s+");
+        int[] resultCase = new int[] {Integer.parseInt(input[0]), Integer.parseInt(input[1])};
+        int m = Integer.parseInt(scanner.nextLine());
+        HashMap<Integer, Node> map = new HashMap<>();
+        for (int i = 0; i < m; i++) {
+            input = scanner.nextLine().split("\\s+");
+            int x = Integer.parseInt(input[0]);
+            int y = Integer.parseInt(input[1]);
+
+            if (!map.containsKey(x))
+                map.put(x, new Node(x));
+            if (!map.containsKey(y))
+                map.put(y, new Node(y));
+            map.get(x).neighbors.add(y);
+            map.get(y).neighbors.add(x);
+        }
+        int result = 0;
+        dfs(resultCase[0], resultCase[1], map, 0);
+        if (!flag)
+            System.out.println(-1);
+    }
+    void dfs(int source, int target, HashMap<Integer, Node> map, int result) {
+        Node node = map.get(source);
+        node.visitFlag = true;
+        List<Integer> neighbors = node.neighbors;
+        result++;
+
+        if (neighbors.contains(target))
+            if (!flag) {
+                System.out.println(result);
+                flag = true;
+                return;
+            }
+        // 종료
+        for (int neighbor : node.neighbors) {
+            if (!map.get(neighbor).visitFlag) {
+                dfs(neighbor, target, map, result);
+            }
+        }
+    }
+
+
+    int k;
+    int v;
+    int e;
+    Map<Integer, BipartiteNode> map;
+    List<Boolean> resultFlags;
+
+    public void bipartiteGraph() {
+        Scanner scanner = new Scanner(System.in);
+        k = Integer.parseInt(scanner.nextLine());
+        while (k > 0) {
+            resultFlags = new ArrayList<>();
+            String[] input = scanner.nextLine().split("\\s+");
+            v = Integer.parseInt(input[0]);
+            e = Integer.parseInt(input[1]);
+            map = new HashMap<>();
+            queue = new LinkedList<>();
+            int start = 0;
+            while(e > 0) {
+                input = scanner.nextLine().split("\\s+");
+                int a = Integer.parseInt(input[0]);
+                int b = Integer.parseInt(input[1]);
+
+                if (start == 0)
+                    start = a;
+
+                if (!map.containsKey(a))
+                    map.put(a, new BipartiteNode(a));
+                if (!map.containsKey(b))
+                    map.put(b, new BipartiteNode(b));
+
+                map.get(a).neighbors.add(b);
+                map.get(b).neighbors.add(a);
+                e--;
+            }
+
+            for (int i = 1; i <= v; i++) {
+                BipartiteNode node = map.get(i);
+                if (node != null && node.flag == null) {
+                    node.flag = true;
+                    dfs(i, map);
+                }
+            }
+            System.out.println(results.isEmpty() ? "YES" : "NO");
+            k--;
+        }
+    }
+
+    void dfs(int i, Map<Integer, BipartiteNode> map) {
+        BipartiteNode node = map.get(i);
+        for (int neighbor : node.neighbors) {
+            if (map.get(neighbor).flag == null) {
+                map.get(neighbor).flag = !node.flag;
+                dfs(neighbor, map);
+            } else {
+                if (map.get(neighbor).flag == node.flag) {
+                    resultFlags.add(true);
+                }
+            }
+        }
+    }
+
+    class BipartiteNode {
+        Integer number;
+        List<Integer> neighbors;
+        Boolean flag;
+
+        public BipartiteNode(int number) {
+            this.number = number;
+            this.neighbors = new ArrayList<>();
+        }
+    }
+
+
 }
