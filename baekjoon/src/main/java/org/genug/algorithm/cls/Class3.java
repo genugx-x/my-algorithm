@@ -2,6 +2,9 @@ package org.genug.algorithm.cls;
 
 import org.genug.algorithm.Main;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Class3 {
@@ -180,6 +183,12 @@ public class Class3 {
         List<Integer> neighbors;
         Boolean visitFlag;
 
+        Integer parent;
+
+        public Node() {
+            this.neighbors = new ArrayList<>();
+            this.visitFlag = false;
+        }
 
         public Node(int number) {
             this.number = number;
@@ -975,5 +984,48 @@ public class Class3 {
         }
     }
 
+    private Map<Integer, Node> mapFor11725;
+    public void findParentsOfTree() {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        mapFor11725 = new HashMap<>();
+        try {
+            int n = Integer.parseInt(br.readLine());
+            for (int i = 0; i < n-1; i++) {
+                String[] input = br.readLine().split("\\s+");
+                int a = Integer.parseInt(input[0]);
+                int b = Integer.parseInt(input[1]);
+
+                if (!mapFor11725.containsKey(a))
+                    mapFor11725.put(a, new Node());
+                if (!mapFor11725.containsKey(b))
+                    mapFor11725.put(b, new Node());
+                mapFor11725.get(a).neighbors.add(b);
+                mapFor11725.get(b).neighbors.add(a);
+            }
+
+            dfs(1);
+            System.out.println(mapFor11725.toString());
+
+            for (int i = 2; i <= n; i++) {
+                System.out.println(mapFor11725.get(i).parent);
+            }
+
+        } catch (IOException ignored) {
+        } finally {
+            try { br.close(); } catch (IOException ignored) {}
+        }
+    }
+    void dfs(int n) {
+        Node node = mapFor11725.get(n);
+        node.visitFlag = true;
+        for (int i : node.neighbors) {
+            Node neighbor = mapFor11725.get(i);
+            if (!neighbor.visitFlag) {
+                neighbor.parent = n;
+                dfs(i);
+            }
+        }
+
+    }
 
 }
