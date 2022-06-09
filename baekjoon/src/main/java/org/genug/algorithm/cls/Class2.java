@@ -883,4 +883,29 @@ public class Class2 {
         }
     }
 
+    // 10814 - 나이순 정렬
+    public void sortByAge() {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            int n = Integer.parseInt(br.readLine());
+            Map<Integer, Queue<String>> map = new TreeMap<>();
+            for (int i = 0; i < n; i++) {
+                String[] input = br.readLine().split("\\s+");
+                int age = Integer.parseInt(input[0]);
+                String name = input[1];
+                if (!map.containsKey(age))
+                    map.put(age, new LinkedList<>());
+                map.get(age).add(name);
+            }
+            for (Map.Entry<Integer, Queue<String>> entry : map.entrySet()) {
+                Queue<String> names = entry.getValue();
+                while (!names.isEmpty()) {
+                    System.out.println(entry.getKey() + " " + names.poll());
+                }
+            }
+        }catch (IOException ignored) {
+        } finally {
+            try { br.close(); } catch (IOException ignored) {}
+        }
+    }
 }
